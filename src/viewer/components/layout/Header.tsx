@@ -62,6 +62,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(({ meta, className },
           {hasRemoteSource && (
             <>
               <button
+                type="button"
                 onClick={handleDownload}
                 className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium theme-text-muted transition-colors hover:bg-[color:var(--color-hover)] hover:text-[color:var(--color-text-strong)]"
               >
@@ -69,6 +70,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(({ meta, className },
                 <span className="hidden sm:inline">Download</span>
               </button>
               <button
+                type="button"
                 onClick={handleOpenOriginal}
                 className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium theme-text-muted transition-colors hover:bg-[color:var(--color-hover)] hover:text-[color:var(--color-text-strong)]"
               >
@@ -78,8 +80,10 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(({ meta, className },
             </>
           )}
           <button
+            type="button"
             onClick={handleClose}
             className="flex h-9 w-9 items-center justify-center rounded-lg theme-text-subtle transition-colors hover:bg-[color:var(--color-hover)] hover:text-[color:var(--color-text-strong)]"
+            aria-label="Close viewer"
           >
             <X className="h-5 w-5" />
           </button>

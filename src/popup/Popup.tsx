@@ -120,6 +120,17 @@ function Popup() {
     setIsDragging(false)
   }, [])
 
+  const handleDropZoneKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (isProcessing) {
+      return
+    }
+
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      fileInputRef.current?.click()
+    }
+  }, [isProcessing])
+
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
@@ -183,6 +194,12 @@ function Popup() {
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onClick={() => !isProcessing && fileInputRef.current?.click()}
+        onKeyDown={handleDropZoneKeyDown}
+        role="button"
+        tabIndex={isProcessing ? -1 : 0}
+        aria-label="Upload .docx file"
+        aria-disabled={isProcessing}
+        aria-busy={isProcessing}
         className={cn(
           "relative mb-5 cursor-pointer overflow-hidden rounded-2xl border-2 border-dashed p-6 transition-all",
           isDragging
@@ -199,6 +216,7 @@ function Popup() {
           accept=".docx"
           onChange={handleFileSelect}
           className="hidden"
+          aria-label="Select a .docx file"
         />
 
         <div className="flex flex-col items-center text-center">
@@ -256,13 +274,16 @@ function Popup() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
+            role="alert"
             className="mb-4 flex items-center gap-2 rounded-xl p-3 text-sm theme-danger-soft"
           >
             <X className="h-4 w-4 shrink-0" />
             <span className="flex-1">{error}</span>
             <button
+              type="button"
               onClick={() => setError(null)}
               className="shrink-0 rounded p-1 hover:bg-[color:var(--color-danger-soft)]"
+              aria-label="Dismiss error"
             >
               <X className="h-3 w-3" />
             </button>
@@ -312,16 +333,20 @@ function Popup() {
 
                 <div className="flex shrink-0 items-center gap-1">
                   <button
+                    type="button"
                     onClick={() => handleOpen(doc.id)}
                     className="rounded-lg p-2 theme-text-subtle transition-colors hover:bg-[color:var(--color-accent-soft)] hover:text-[color:var(--color-accent-secondary)]"
                     title="Open"
+                    aria-label={`Open ${doc.filename}`}
                   >
                     <ExternalLink className="h-4 w-4" />
                   </button>
                   <button
+                    type="button"
                     onClick={() => handleDelete(doc.id)}
                     className="rounded-lg p-2 theme-text-subtle transition-colors hover:bg-[color:var(--color-danger-soft)] hover:text-[color:var(--color-danger)]"
                     title="Delete"
+                    aria-label={`Delete ${doc.filename}`}
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
